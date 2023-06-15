@@ -1,36 +1,19 @@
 //CODERHOUSE BACKEND 43360
-//Tercera pre-entrega, Servidores Web.
-
+//Alumno: Mellyid Salomón
+//Primer Entrega Backend.
 import express from "express"
-import ProductManager from "../manager/productManager.js"
+import productsRouter from './routes/products.router.js'
+import cartsRouter from './routes/cart.router.js'
 
 const app = express()
-const manager = new ProductManager(`../manager/products.json`)
 
-let products = await manager.getProducts()
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
-//getProducts, limite por query.
-app.get("/products", (req, res) => {
-    let limit = req.query.limit
-    if (limit) {
-        res.send(products.slice(limit))
-    } else {
-        res.send(products)
-    }
-})
+//router de products
+app.use("/api/products", productsRouter)
 
-//getProductById, por params.
-app.get("/products/:pid", (req, res) => {
-    let idProducto = parseInt(req.params.pid)
-    let producto = products.find(x => x.id === idProducto)
-    if (producto) {
-        res.send(producto)
-    } else {
-        res.send({ error: "Producto no encontrado weon turn the fuck back gringo." })
-    }
-})
-
-
-
+//router de carts
+app.use("/api/carts", cartsRouter)
 
 app.listen(8080, () => console.log("Server up."))
