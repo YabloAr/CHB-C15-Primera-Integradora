@@ -1,29 +1,15 @@
 import fs from "fs"
-import ProductManager from "../services/productManager.js"
+import ProductManager from "./productManagerFs.js"
 
 const productManager = new ProductManager("./data/products.json")
 
+//MANAGER ORIENTADO A FILE SYSTEM
 export default class CartManager {
     constructor(path) {
         this.path = path
     }
 
-    //works ok
-    getCarts = async () => {
-        const data = await fs.promises.readFile(this.path, "utf-8")
-        const cartsArray = JSON.parse(data)
-        return cartsArray
-    }
-
-    //works ok
-    getCartById = async (cartId) => {
-        const data = await fs.promises.readFile(this.path, "utf-8")
-        const cartsArray = JSON.parse(data)
-        const foundCart = cartsArray.find(x => x.id === cartId)
-        return foundCart
-    }
-
-    //works ok
+    //CREAR CARRITO, funciona perfecto
     createCart = async () => {
         try {
             if (fs.existsSync(this.path)) {
@@ -47,7 +33,22 @@ export default class CartManager {
         } catch (error) { error.message }
     }
 
-    //work ok 
+    //OBTENER CARRITO, funciona perfecto
+    getCarts = async () => {
+        const data = await fs.promises.readFile(this.path, "utf-8")
+        const cartsArray = JSON.parse(data)
+        return cartsArray
+    }
+
+    //OBTENER CARRITO POR ID, funciona perfecto
+    getCartById = async (cartId) => {
+        const data = await fs.promises.readFile(this.path, "utf-8")
+        const cartsArray = JSON.parse(data)
+        const foundCart = cartsArray.find(x => x.id === cartId)
+        return foundCart
+    }
+
+    //AÑADIR PRODUCTO AL CARRITO, funciona perfecto
     addProductToCart = async (cartId, productId) => {
 
         //definiendo cartsArray and productsArray

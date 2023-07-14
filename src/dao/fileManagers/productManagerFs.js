@@ -1,11 +1,12 @@
 import fs from "fs"
 
+//MANAGER HECHO ORIENTADO A FILE SYSTEM
 export default class ProductManager {
 
     constructor(path) {
         this.path = path
     }
-
+    //OBTENER PRODUCTOS (GET)
     getProducts = async () => {
         try {
             if (fs.existsSync(this.path)) {
@@ -20,8 +21,7 @@ export default class ProductManager {
 
     }
 
-    //validacion por codigo existente, funciona bien
-    //validacion por tipo de datos no funciona pero tampoco lo rompe, la causa seguro esta en la asincronia.
+    //VALIDACION DE TIPO DE DATOS, funciona perfecto (deberian estar en el router)
     async checkProductValues(thisProduct) {
         //funcion para validar strings
         async function isString(value) {
@@ -55,7 +55,7 @@ export default class ProductManager {
             console.log(`Manager CheckValues failed, ${error.message}`)
         }
     }
-    //funciona perfecto
+    //AÑADIR PRODUCTO (GET),funciona perfecto
     async addProduct(newProduct) {
 
         const productsObj = await this.getProducts()
@@ -91,7 +91,7 @@ export default class ProductManager {
         }
     }
 
-    //funciona perfecto
+    //OBBTENER PRODUCTO POR ID (GET), funciona perfecto
     async getProductById(thisId) {
         try {
             const data = await fs.promises.readFile(this.path, "utf-8")
@@ -106,7 +106,7 @@ export default class ProductManager {
         } catch (error) { console.log(`GPI error is ${error.message}`) }
     }
 
-    //funciona todo
+    //ACTUALIZAR PRODUCTO (PUT), funciona perfecto
     async updateProduct(thisProduct) {
         try {
             const productsObj = await this.getProducts()
@@ -132,7 +132,7 @@ export default class ProductManager {
         } catch (error) { console.log(`UpdateProduct in manager failed, error is ${error.message}`) }
     }
 
-    //funciona perfecto
+    //ELIMINAR PRODUCTO (DELETE), funciona perfecto
     async deleteProduct(thisId) {
         try {
             const data = await fs.promises.readFile(this.path, "utf-8")

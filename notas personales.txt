@@ -1,0 +1,1 @@
+NOTA: usar ternarios en el proyecto de Backend
