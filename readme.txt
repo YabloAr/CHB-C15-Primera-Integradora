@@ -1,8 +1,4 @@
 Update chat:
-Views con socket.io, terminado.
-
-Message db (work in progress), avance pero no logro que se guarden los documentos, no suelta ningun error en ningun lado, pero tampoco las escribe en la db,
-no tengo ninguna señal ni por consola ni por errores que me de una mano para saber porque esta pasando. 
 
 CONSULTA A TUTOR
 FileManagement, la verdad no tengo idea de como manejar los archivos con respecto al codigo referido a los mensajes.
