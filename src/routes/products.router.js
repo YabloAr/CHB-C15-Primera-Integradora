@@ -5,17 +5,17 @@ import ProductManager from "../dao/dbManagers/productsManager.js"
 const router = Router()
 const manager = new ProductManager()
 
-//Funcion de validacion de datos
+//-------------Funciones de validacion
+//funcion para validar strings
+async function isString(value) {
+    return typeof value === 'string';
+}
+//funcion para validar number
+async function isNumber(value) {
+    return typeof value === 'number';
+}
+//Funcion de validacion de datos de producto
 async function checkProductValues(thisProduct) {
-    //funcion para validar strings
-    async function isString(value) {
-        return typeof value === 'string';
-    }
-    //funcion para validar number
-    async function isNumber(value) {
-        return typeof value === 'number';
-    }
-
     try {
         //primer validacion, existencia de propiedades y tipo de dato de las mismas
         if (await isString(thisProduct.title) === true &&
@@ -35,6 +35,7 @@ async function checkProductValues(thisProduct) {
         console.log(`Product Router: checkProductValues resultado try/catch fallida, ${error.message}`)
     }
 }
+//-------------Fin funciones de validacion
 
 //...api/products
 

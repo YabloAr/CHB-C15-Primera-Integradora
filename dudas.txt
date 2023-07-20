@@ -1,6 +1,0 @@
-views.router: porque los import de los managers tienen que estar en mayuscula? Es por convencion o por logica?
-product.router: en el metodo post para crear un producto nuevo "saveProduct (nota, creo que tiene muchos condicionales...hay alguno de mas?)"
-product.router: getAll, si no existen productos, no recibe el objeto con la info del error que le envia el manager.
-
-
-
