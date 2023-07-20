@@ -11,6 +11,7 @@ export default class Messages {
             return { status: 'Success.', message: 'Message added.' }
         } catch (error) { console.error('Error creating messages from db', error.message) }
     }
+
     getAllMessages = async () => {
         try {
             const messages = await messageModel.find()

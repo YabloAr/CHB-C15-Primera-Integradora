@@ -2,6 +2,7 @@
 //PRIMER ENTREGA INTEGRADORA.
 //Fecha de entrega: 13/07/2023
 //Alumno: Mellyid Salomón
+//Tutor: Juan Manuel Gonzalez
 
 //DEPENDENCIAS
 import express from "express"
@@ -10,13 +11,11 @@ import handlebars from "express-handlebars";
 import mongoose from "mongoose";
 import { Server } from 'socket.io'
 
-//Gestores de rutas
+//Gestores de rutas y manager de mensajes
 import viewsRouter from './routes/views.router.js'
 import productsRouter from './routes/products.router.js'
 import cartsRouter from './routes/cart.router.js'
-
-//Importo el message manager
-import messageManager from "./dao/dbManagers/messagesManager.js";
+import MessageManager from "./dao/dbManagers/messagesManager.js";
 
 //Definimos el servidor y agregamos el middleware de parseo de las request
 const PORT = 8080 //Buena practica, definir una variable con el puerto.
@@ -37,30 +36,29 @@ app.engine('handlebars', handlebars.engine()) //habilitamos el uso del motor de 
 app.set('views', __dirname + '/views') //declaramos la carpeta con las vistas para las plantillas.
 app.set('view engine', 'handlebars') //le decimos a express que use el motor de vistas de handlebars.
 
-//ROUTERS, aqui alojamos los diferentes tipos de request (GET, POST, PUT, DELETE, etc)
+//Routers, aqui alojamos los diferentes tipos de request (GET, POST, PUT, DELETE, etc)
 app.use('/', viewsRouter) //Definimos la ruta raiz de nuestro proyecto, y las respuestas en vistas con las handlebars.
 app.use("/api/products", productsRouter) //router de products
 app.use("/api/carts", cartsRouter) //router de carts
 
-//Aplicacion chat con socket.io
+
+
+//------------------COMIENZA Aplicacion chat con socket.io
+const messageManager = new MessageManager()
+
 app.use(express.static(__dirname + '/public')) //en el js pasa la magia.
-const io = new Server(httpserver) //Declaramos el servidor http dentro del server para express para socket.io
+const io = new Server(httpserver) //Declaramos el servidor http dentro del server de express para socket.io
 
-let messages = [] //esta sera la coleccion de objetos.
-
-//.on = escuchar/recibir
-//Cuando hay una nueva connection,
-//queda a la escucha permanente con esa conexion.
+//Encendemos el socket con .on (escucha/recibe)
 io.on('connection', socket => {
     console.log("App.js Chat: New client connected.")
-
     //el socket espera algun 'message' desde el cliente (index.js), data llega como objeto, {user: x, message: x}
     socket.on('message', async data => {
-        messages.push(data)
-        io.emit('messageLogs', messages) //envia al cliente un 'messageLogs', con el array completo de mensajes.
         try {
             await messageManager.saveMessage(data)
-        } catch (error) { return { status: 'error', message: `app.js saving messages failed. ${error.message}` } }
+            const allMessages = await messageManager.getAllMessages()
+            io.emit('messageLogs', allMessages) //envia al cliente la coleccion completa de mensajes desde la db
+        } catch (error) { return { status: 'error', message: `app.js socket.io save or getAll messages failed. ${error.message}` } }
     })
 })
-
+//------------------FIN Aplicacion chat con socket.io
